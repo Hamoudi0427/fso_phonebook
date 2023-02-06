@@ -7,30 +7,6 @@ app.use(cors())
 app.use(express.static('build'))
 app.use(express.json())
 
-// data
-let persons = [
-    { 
-      "id": 1,
-      "name": "Artos Hellas", 
-      "number": "040-123456"
-    },
-    { 
-      "id": 2,
-      "name": "Ada Lovelace", 
-      "number": "39-44-5323523"
-    },
-    { 
-      "id": 3,
-      "name": "Dan Abramov", 
-      "number": "12-43-234345"
-    },
-    { 
-      "id": 4,
-      "name": "Mary Poppendieck", 
-      "number": "39-23-6423122"
-    }
-]
-
 // db set-up
 const password = "ham0427"
 const url =
@@ -87,14 +63,18 @@ app.delete('/api/persons/:id', (request, response) => {
 
 app.post('/api/persons', (request, response) => {
     const newPerson = request.body
-    if (newPerson.name === undefined || newPerson.number === undefined || 
-        persons.find(person => person.name === newPerson.name) !== undefined) {
-        response.status(400).json({error: 'name must be unique'})
+    if (newPerson.name === undefined || newPerson.number === undefined) {
+        return response.status(400).json({error: 'name must be unique'})
     }
 
-    newPerson.id = Math.random() * 100000
-    persons.push(newPerson)
-    response.json(newPerson)
+    const person = new Person({
+        name: newPerson.name, 
+        number: newPerson.number
+    })
+
+    person.save().then(savedPerson => {
+        response.json(savedPerson)
+    })
 })
 
 const unknownEndpoint = (request, response) => {
