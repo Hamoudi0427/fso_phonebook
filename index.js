@@ -32,6 +32,7 @@ let persons = [
 ]
 
 // db set-up
+const password = "ham0427"
 const url =
     `mongodb+srv://hamoudi0427:${encodeURIComponent(password)}@cluster0.dz49cjj.mongodb.net/phonebookAppUpdated?retryWrites=true&w=majority`
   
@@ -102,7 +103,7 @@ const unknownEndpoint = (request, response) => {
 app.use(unknownEndpoint)
 
 // express set-up 
-const PORT = process.env.PORT || 8080
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
     console.log(`server started on port ${PORT}`);
 })
