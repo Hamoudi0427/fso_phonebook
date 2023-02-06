@@ -39,7 +39,7 @@ const url =
 mongoose.set('strictQuery',false)
 mongoose.connect(url)
 
-const personSchema = new mongoose.Schmema({
+const personSchema = new mongoose.Schema({
     name: String,
     number: String
 })
