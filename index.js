@@ -1,34 +1,12 @@
+require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
-const mongoose = require('mongoose')
+const Person = require('./models/persons')
 
 const app = express()
 app.use(cors())
 app.use(express.static('build'))
 app.use(express.json())
-
-// db set-up
-const password = "ham0427"
-const url =
-    `mongodb+srv://hamoudi0427:${encodeURIComponent(password)}@cluster0.dz49cjj.mongodb.net/phonebookAppUpdated?retryWrites=true&w=majority`
-  
-mongoose.set('strictQuery',false)
-mongoose.connect(url)
-
-const personSchema = new mongoose.Schema({
-    name: String,
-    number: String
-})
-
-personSchema.set('toJSON', {
-    transform: (document, returnedObject) => {
-        returnedObject.id = returnedObject._id.toString()
-        delete returnedObject._id
-        delete returnedObject.__v
-    }
-})
-
-const Person = mongoose.model('Person', personSchema)
 
 // routes
 app.get('/api/persons', (request, response) => {
