@@ -24,14 +24,10 @@ app.get('/info', (request, response) => {
 })
 
 app.get('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id)
-    const person = persons.find(person => person.id === id)
-    if (person) {
-        response.json(person)
-    } else {
-        response.status(404).end()
-    }
-})
+    Person.findById(request.params.id).then(res => {
+            response.json(res)
+        })
+    })
 
 app.delete('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
@@ -49,6 +45,7 @@ app.post('/api/persons', (request, response) => {
         name: newPerson.name, 
         number: newPerson.number
     })
+    // id made my mongodb
 
     person.save().then(savedPerson => {
         response.json(savedPerson)
