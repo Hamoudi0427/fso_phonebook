@@ -25,6 +25,7 @@ app.get('/info', (request, response) => {
 })
 
 app.get('/api/persons/:id', (request, response) => {
+    console.log(request.params.id)
     Person.findById(request.params.id)  
         .then(res => {
             response.json(res)
