@@ -14,6 +14,7 @@ app.get('/api/persons', (request, response) => {
     Person 
         .find({})
         .then(notes => {
+            console.log(notes)
             response.json(notes)
         })
 })
