@@ -25,8 +25,13 @@ app.get('/info', (request, response) => {
 })
 
 app.get('/api/persons/:id', (request, response) => {
-    Person.findById(request.params.id).then(res => {
+    Person.findById(request.params.id)  
+        .then(res => {
             response.json(res)
+        })
+        .catch(error => {
+            console.log(error)
+            response.status(500).end()
         })
     })
 
