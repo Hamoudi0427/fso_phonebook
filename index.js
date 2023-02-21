@@ -23,7 +23,7 @@ app.get('/api/persons', (request, response, next) => {
 })
 
 app.get('/info', (request, response) => {
-    response.send(`<p>Phonebook has info for ${persons.length} people</p>
+    response.send(`<p>Phonebook has info for people</p>
         <p>${new Date()}</p>`)
 })
 
