@@ -2,7 +2,6 @@ require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const Person = require('./models/persons')
-const { NextWeek } = require('@material-ui/icons')
 
 const app = express()
 app.use(cors())
