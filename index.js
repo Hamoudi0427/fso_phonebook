@@ -2,6 +2,7 @@ require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const Person = require('./models/persons')
+const { NextWeek } = require('@material-ui/icons')
 
 const app = express()
 app.use(cors())
@@ -9,13 +10,16 @@ app.use(express.static('build'))
 app.use(express.json())
 
 // routes
-app.get('/api/persons', (request, response) => {
+app.get('/api/persons', (request, response, next) => {
     console.log("GET request for all of the notes")
     Person 
         .find({})
         .then(notes => {
             console.log(notes)
             response.json(notes)
+        })
+        .catch(error => {
+            next(error)
         })
 })
 
@@ -28,18 +32,25 @@ app.get('/api/persons/:id', (request, response) => {
     console.log(request.params.id)
     Person.findById(request.params.id)  
         .then(res => {
-            response.json(res)
+            if (res) {
+                response.json(res)
+            } else {
+                response.status(404).end() // not found, no response
+            }
         })
         .catch(error => {
-            console.log(error)
-            response.status(500).end()
+            next(error)
         })
     })
 
-app.delete('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id)
-    persons = persons.filter(person => person.id !== id)
-    response.status(204).end()
+app.delete('/api/persons/:id', (request, response, next) => {
+    Person.findByIdAndRemove(request.params.id)
+        .then(result => {
+            response.status(204).end() // success, no content
+        })
+        .catch(error => {
+            next(error)
+        }) // pass to error handler middleware
 })
 
 app.post('/api/persons', (request, response) => {
@@ -54,15 +65,29 @@ app.post('/api/persons', (request, response) => {
     })
     // id made my mongodb
 
-    person.save().then(savedPerson => {
-        response.json(savedPerson)
-    })
+    person.save()
+        .then(savedPerson => {
+         response.json(savedPerson)
+        })
+        .catch(error => {
+            next(error)
+        })
 })
 
+// unknown endpoint
 const unknownEndpoint = (request, response) => {
     response.status(400).json({error: 'unknown endpoint'})
 }
 app.use(unknownEndpoint)
+
+// error handler middleware
+const handleError = (error, req, res, next) => {
+    console.log(error.message)
+
+    if (error.name == 'CastError') return res.status(400).send({error: 'malformatted id'})
+    next(error)
+}
+app.use(handleError)
 
 // express set-up 
 const PORT = process.env.PORT || 3001
