@@ -17,9 +17,7 @@ app.get('/api/persons', (request, response, next) => {
             console.log(notes)
             response.json(notes)
         })
-        .catch(error => {
-            next(error)
-        })
+        .catch(error => next(error))
 })
 
 app.get('/info', (request, response) => {
@@ -37,9 +35,7 @@ app.get('/api/persons/:id', (request, response) => {
                 response.status(404).end() // not found, no response
             }
         })
-        .catch(error => {
-            next(error)
-        })
+        .catch(error => next(error))
     })
 
 app.delete('/api/persons/:id', (request, response, next) => {
@@ -49,9 +45,7 @@ app.delete('/api/persons/:id', (request, response, next) => {
         .then(result => {
             response.status(204).end() // success, no content
         })
-        .catch(error => {
-            next(error)
-        }) // pass to error handler middleware
+        .catch(error => next(error)) // pass to error handler middleware
 })
 
 app.post('/api/persons', (request, response) => {
@@ -70,9 +64,7 @@ app.post('/api/persons', (request, response) => {
         .then(savedPerson => {
          response.json(savedPerson)
         })
-        .catch(error => {
-            next(error)
-        })
+        .catch(error => next(error))
 })
 
 // unknown endpoint
