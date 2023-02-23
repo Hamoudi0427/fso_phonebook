@@ -20,9 +20,12 @@ app.get('/api/persons', (request, response, next) => {
         .catch(error => next(error))
 })
 
-app.get('/info', (request, response) => {
-    response.send(`<p>Phonebook has info for people</p>
-        <p>${new Date()}</p>`)
+app.get('/info', (request, response, next) => {
+    Person.find({})
+            .then(people => {
+                response.send(`Phonebook has info for ${people.length}.`)
+            })
+            .catch(error => next(error))
 })
 
 app.get('/api/persons/:id', (request, response) => {
