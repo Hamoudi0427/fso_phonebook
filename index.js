@@ -51,7 +51,7 @@ app.delete('/api/persons/:id', (request, response, next) => {
         .catch(error => next(error)) // pass to error handler middleware
 })
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
     const newPerson = request.body
 
     const person = new Person({
