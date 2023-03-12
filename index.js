@@ -53,9 +53,6 @@ app.delete('/api/persons/:id', (request, response, next) => {
 
 app.post('/api/persons', (request, response) => {
     const newPerson = request.body
-    if (newPerson.name === undefined || newPerson.number === undefined) {
-        return response.status(400).json({error: 'name must be unique'})
-    }
 
     const person = new Person({
         name: newPerson.name, 
@@ -93,8 +90,8 @@ app.use(unknownEndpoint)
 const handleError = (error, req, res, next) => {
     console.log(error.message)
 
-    if (error.name == 'CastError') return res.status(400).send({error: 'malformatted id'})
-    else if (error.name == 'ValidationError') return res.status(400).json({error: error.message})
+    if (error.name === 'CastError') return res.status(400).send({error: 'malformatted id'})
+    else if (error.name === 'ValidationError') return res.status(400).json({error: error.message})
     next(error)
 }
 app.use(handleError)
